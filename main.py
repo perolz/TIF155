@@ -10,10 +10,13 @@ A=sy.Matrix([[(sigma+3),4],[-(9/4),sigma-3]])
 eigen=A.eigenvals()
 
 
+print('Eigenvectors for system')
+sy.pprint(A.eigenvects())
+print('Inverse')
+sy.pprint(A.inv())
+sy.pprint(sy.simplify(A.inv()))
 
-print(A.eigenvects())
-print(A.inv())
-
+inverse=sy.simplify(A.inv())
 (t,C1,C2) = sy.symbols('t C1 C2')
 x, y = sy.symbols('x, y', function=True)
 
@@ -37,5 +40,5 @@ tspace=np.linspace(-1.5,1.5,1000)
 x_vals = xlam(tspace,1,1,1)
 y_vals = ylam(tspace,1,1,1)
 plt.plot(x_vals,y_vals)
-plt.show()
-#for i in range(-1,1):
+#plt.show()
+
