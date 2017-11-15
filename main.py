@@ -56,7 +56,22 @@ def second_exercise():
     print(values)
     sy.pprint(values)
 
+
+def normal_form():
+    #x=sy.Function('f')
+    (r,x)=sy.symbols('r x')
+    #eq=sy.Eq(sy.Derivative(x(t),t),x(t)**3-3*x(t)**2+(r+2)*x(t)-r)
+    eq = [sy.Eq(x ** 3 - 3 * x ** 2 + (r + 2) * x - r,0),
+          sy.Eq(3*x ** 2 - 6 * x + (r + 2),0)]
+    solution=sy.solve(eq)
+    sy.pprint(solution[0])
+    y=sy.symbols('y')
+    newEq=eq[0].subs(x,y+solution[0][x])
+    sy.pprint(newEq)
+
+
 if __name__=='__main__':
     #first_exercise(1)
-    print('\n')
-    second_exercise()
+    #print('\n')
+    #second_exercise()
+    normal_form()
