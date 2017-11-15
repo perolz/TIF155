@@ -1,6 +1,8 @@
 import sympy as sy
 import numpy as np
 import matplotlib.pyplot as plt
+from sympy.plotting import plot3d
+from sympy.plotting import plot_parametric
 
 sy.init_printing()
 
@@ -63,15 +65,66 @@ def normal_form():
     #eq=sy.Eq(sy.Derivative(x(t),t),x(t)**3-3*x(t)**2+(r+2)*x(t)-r)
     eq = [sy.Eq(x ** 3 - 3 * x ** 2 + (r + 2) * x - r,0),
           sy.Eq(3*x ** 2 - 6 * x + (r + 2),0)]
-    solution=sy.solve(eq)
-    sy.pprint(solution[0])
-    y=sy.symbols('y')
-    newEq=eq[0].subs(x,y+solution[0][x])
-    sy.pprint(newEq)
+    solution=sy.solve(eq)[0]
 
+    (y,t)=sy.symbols('y t')
+
+    newEq=[sy.expand(eq[0].subs([(x,y+solution[x]),(r,t+solution[r])]))
+        ,sy.expand(eq[0].subs([(x,y+solution[x]),(r,t+solution[r])]))]
+    expression=x ** 3 - 3 * x ** 2 + (r + 2) * x - r
+    newExp=expression.subs([(x,y+solution[x]),(r,t+solution[r])])
+    print(sy.expand(newExp))
+    sy.plot(newExp.subs(t,0))
+
+    #sy.lambdify((t, y), newExp, modules='numpy')
+    #tspace = np.linspace(-1.5, 1.5, 1000)
+
+def saddle_node():
+    (x,h,r,t)=sy.symbols('x h r t')
+    #x = sy.symbols('x',function=True)
+    equation=[sy.Eq(h+r*x-x**2,0),sy.Eq(r-2*x,0)]
+    solution=sy.solve(equation)
+    print(solution)
+    xvalue=sy.lambdify(x,solution[0][h])
+    yvalue=sy.lambdify(x,solution[0][r])
+
+    test=-40-15*x-x**2
+    print(sy.solve(sy.Eq(test,0)))
+    #ax=plot_parametric(x,test)
+
+    fig=plt.figure(1)
+    ax=fig.add_subplot(1,1,1)
+    ax.set_xlabel('h')
+    ax.set_ylabel('r')
+    ax.set_title('Plot of Saddle-node bifurcations')
+    tspace = np.linspace(-10, 10, 1000)
+    ax.plot(xvalue(tspace),yvalue(tspace),color='r')
+    # ax.fill_between(xvalue(tspace[-500:]),yvalue(tspace[-500:]),20,facecolor='blue')
+    # ax.fill_between(tspace[500:700],-20,20,facecolors='blue')
+    # ax.fill_between(xvalue(tspace[:500]),yvalue(tspace[:500]),-20,facecolor='blue')
+
+    ax.text(-80,18,'one stable and one unstable fixed point outside red line')
+    ax.text(-80, 7, 'one unstable fixed point on red line')
+    ax.text(-80, 0, 'zero fixed points between red lines')
+    # ax.annotate('1 fixed point on red line', xy=(xvalue(4), yvalue(4)), xytext=(3, 1.5),
+    #             arrowprops=dict(facecolor='black', shrink=0.05),
+    #             )
+    ax.set_xlim([-100, 3])
+    ax.set_ylim([-20, 20])
+
+
+    ax.grid(True,which='both')
+    #plt.show()
+    fig.savefig('Saddle-node_a.png')
+
+    fig2 = plt.figure(2)
+    ax2 = fig2.add_subplot(1, 1, 1)
+    plot3d(tspace)
+    plt.show()
 
 if __name__=='__main__':
     #first_exercise(1)
     #print('\n')
     #second_exercise()
-    normal_form()
+    # normal_form()
+    saddle_node()
