@@ -90,9 +90,9 @@ def saddle_node():
     xvalue=sy.lambdify(x,solution[0][h])
     yvalue=sy.lambdify(x,solution[0][r])
 
-    test=-60-10*x-x**2
+    test=10-10*x-x**2
     print(sy.solve(sy.Eq(test,0)))
-    ax=plot_parametric(x,test)
+    #ax=plot_parametric(x,test)
 
     fig=plt.figure(1)
     ax=fig.add_subplot(1,1,1)
@@ -123,10 +123,11 @@ def saddle_node():
 
     X, Y= np.meshgrid(xvalue(tspace),yvalue(tspace))
     tmeshx,tmeshy=np.meshgrid(tspace,tspace)
-    ax2.plot_trisurf(xvalue(tspace),yvalue(tspace),tspace)
+    ax2.set_title('test')
     ax2.set_xlabel('h')
     ax2.set_ylabel('r')
-    #ax2.plot_surface(tmeshx,xvalue(tmeshx),yvalue(tmeshy))
+    ax2.set_zlabel('x')
+    ax2.plot_surface(xvalue(tmeshx),yvalue(tmeshy),tmeshx)
     plt.show()
 
 if __name__=='__main__':
