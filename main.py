@@ -98,7 +98,7 @@ def saddle_node():
     ax=fig.add_subplot(1,1,1)
     ax.set_xlabel('h')
     ax.set_ylabel('r')
-    ax.set_title('Plot of Saddle-node bifurcations')
+    ax.set_title('Excersice_a')
     tspace = np.linspace(-10, 10, 1000)
     ax.plot(xvalue(tspace),yvalue(tspace),color='r')
     # ax.fill_between(xvalue(tspace[-500:]),yvalue(tspace[-500:]),20,facecolor='blue')
@@ -117,17 +117,18 @@ def saddle_node():
 
     ax.grid(True,which='both')
     #plt.show()
-    fig.savefig('Saddle-node_a.png')
+    fig.savefig('Excersice_a.png')
     fig2 = plt.figure(2)
     ax2 = fig2.gca(projection='3d')
 
     X, Y= np.meshgrid(xvalue(tspace),yvalue(tspace))
     tmeshx,tmeshy=np.meshgrid(tspace,tspace)
-    ax2.set_title('test')
+    ax2.set_title('Excersice_b')
     ax2.set_xlabel('h')
     ax2.set_ylabel('r')
     ax2.set_zlabel('x')
-    ax2.plot_surface(xvalue(tmeshx),yvalue(tmeshy),tmeshx)
+    ax2.plot_surface(xvalue(tmeshy),yvalue(tmeshx),tmeshy)
+    fig2.savefig('Excersice_b')
     plt.show()
 
 if __name__=='__main__':
