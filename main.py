@@ -3,6 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sympy.plotting import plot3d
 from sympy.plotting import plot_parametric
+from mpl_toolkits.mplot3d import Axes3D
+
 
 sy.init_printing()
 
@@ -88,9 +90,9 @@ def saddle_node():
     xvalue=sy.lambdify(x,solution[0][h])
     yvalue=sy.lambdify(x,solution[0][r])
 
-    test=-40-15*x-x**2
+    test=-60-10*x-x**2
     print(sy.solve(sy.Eq(test,0)))
-    #ax=plot_parametric(x,test)
+    ax=plot_parametric(x,test)
 
     fig=plt.figure(1)
     ax=fig.add_subplot(1,1,1)
@@ -116,10 +118,15 @@ def saddle_node():
     ax.grid(True,which='both')
     #plt.show()
     fig.savefig('Saddle-node_a.png')
-
     fig2 = plt.figure(2)
-    ax2 = fig2.add_subplot(1, 1, 1)
-    plot3d(tspace)
+    ax2 = fig2.gca(projection='3d')
+
+    X, Y= np.meshgrid(xvalue(tspace),yvalue(tspace))
+    tmeshx,tmeshy=np.meshgrid(tspace,tspace)
+    ax2.plot_trisurf(xvalue(tspace),yvalue(tspace),tspace)
+    ax2.set_xlabel('h')
+    ax2.set_ylabel('r')
+    #ax2.plot_surface(tmeshx,xvalue(tmeshx),yvalue(tmeshy))
     plt.show()
 
 if __name__=='__main__':
