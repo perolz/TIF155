@@ -1,9 +1,11 @@
 import sympy as sy
+#from sympy import sy
 import numpy as np
 import matplotlib.pyplot as plt
 from sympy.plotting import plot3d
 from sympy.plotting import plot_parametric
 from mpl_toolkits.mplot3d import Axes3D
+import pickle
 
 
 sy.init_printing()
@@ -131,17 +133,66 @@ def saddle_node():
     fig2.savefig('Excersice_b')
     plt.show()
 
-def Subcritical():
-    r,x = sy.symbols('r x')
+def Subcriticalplot():
+    r,x,t = sy.symbols('r x t',real=True)
     equation=r*x+4*x**3-9*x**5
     system=[sy.Eq(equation,0),sy.Eq(sy.diff(equation,x),0)]
-    solution=sy.solve(system)
-    sy.pprint(solution)
+
 
     eqfunc=sy.lambdify((r,x),equation,modules='numpy')
-    tspace=np.linspace(-5,5)
-    plt.plot(tspace,eqfunc(tspace,tspace))
+    tspace=np.linspace(-1,1)
+    testValues=np.arange(-0.6,1,0.001)
+    values=[]
+    for i in testValues:
+        tmp=[]
+        for j in range(len(system)):
+            tmp.append(system[j].subs(r,sy.N(i)))
+        solutions=sy.solve(tmp[0],x)
+        values.append(solutions)
+
+    unstable1 = []
+    unstable2 = []
+    unstable3 = []
+    stable1 = []
+    stable2 = []
+    tshort=[]
+    tmedium=[]
+    for i in range(len(testValues)):
+        if(len(values[i])==1):
+            unstable1.append(values[i][0])
+        elif(len(values[i])==3):
+            unstable1.append(values[i][1])
+            stable1.append(values[i][0])
+            stable2.append(values[i][-1])
+            tmedium.append(testValues[i])
+        else:
+            unstable1.append(values[i][2])
+            unstable2.append(values[i][1])
+            unstable3.append(values[i][3])
+            stable1.append(values[i][0])
+            stable2.append(values[i][-1])
+            tshort.append(testValues[i])
+
+    fig = plt.figure(1)
+    plt.plot(tshort+tmedium,stable1,'r')
+    plt.plot(tshort + tmedium, stable2,'r')
+    plt.plot(testValues, unstable1, 'r--')
+    plt.plot(tshort, unstable2, 'r--')
+    plt.plot(tshort, unstable3, 'r--')
+    plt.xlabel('r')
+    plt.ylabel('x*')
+    plt.title('Subcritical pitchfork')
+    with open('myplot14.pkl', 'wb') as fid:
+        pickle.dump((fig,values,testValues), fid)
+
     plt.show()
+
+def Subcriticalb():
+    r, x= sy.symbols('r x', real=True)
+    equation = r * x + 4 * x ** 3 - 9 * x ** 5
+    system = [sy.Eq(equation, 0), sy.Eq(sy.diff(equation, x), 0)]
+    sy.pprint(sy.solve(system))
+    equation.subs((r,-4/9))
 
 
 if __name__=='__main__':
@@ -150,4 +201,4 @@ if __name__=='__main__':
     #second_exercise()
     # normal_form()
     #saddle_node()
-    Subcritical()
+    Subcriticalb()
