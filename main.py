@@ -131,9 +131,23 @@ def saddle_node():
     fig2.savefig('Excersice_b')
     plt.show()
 
+def Subcritical():
+    r,x = sy.symbols('r x')
+    equation=r*x+4*x**3-9*x**5
+    system=[sy.Eq(equation,0),sy.Eq(sy.diff(equation,x),0)]
+    solution=sy.solve(system)
+    sy.pprint(solution)
+
+    eqfunc=sy.lambdify((r,x),equation,modules='numpy')
+    tspace=np.linspace(-5,5)
+    plt.plot(tspace,eqfunc(tspace,tspace))
+    plt.show()
+
+
 if __name__=='__main__':
     #first_exercise(1)
     #print('\n')
     #second_exercise()
     # normal_form()
-    saddle_node()
+    #saddle_node()
+    Subcritical()
