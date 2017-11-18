@@ -18,8 +18,30 @@ C1,C2,omega =sy.symbols('C1 C2 omega')
 initialConditions=[z.subs(t,0) for z in solutions]
 solutionsForC1C2=sy.solve(initialConditions)
 
-newSolutions=[z.subs([(C1,solutionsForC1C2[C1]),(C2,solutionsForC1C2[C2]),(sy.sqrt(5),omega)]) for z in solutions]
-print(solutions)
-sy.pprint(sy.simplify(newSolutions[0]))
+newSolutions=[z.subs([(C1,solutionsForC1C2[C1]),(C2,solutionsForC1C2[C2])]) for z in solutions]
+#
+# print(solutions)
+
+print(sy.simplify(newSolutions[0]))
 sy.pprint(sy.simplify(newSolutions[1]))
 
+func=[sy.lambdify((t,sigma,x(0),y(0)),z.rhs) for z in newSolutions]
+
+tspace=np.linspace(-2,1,10)
+x0=1
+y0=1
+sigmaValue=[-0.1,0,1/10]
+for i in sigmaValue:
+    fig=plt.figure()
+    plt.title(r'Plot for $\sigma$=%1.1f' %i)
+    plt.xlabel(x(t))
+    plt.ylabel(y(t))
+    plt.tight_layout()
+    test0=[y-x for x in func[0](tspace[:-1], i, x0, y0) for y in func[0](tspace[1:], i, x0, y0)]
+    test1 = [y - x for x in func[1](tspace[:-1], i, x0, y0) for y in func[1](tspace[1:], i, x0, y0)]
+    plt.quiver(func[0](tspace[:-1], i, x0, y0),func[1](tspace[:-1], i, x0, y0),
+               test0,test1)
+    #plt.plot(func[0](tspace, i, x0, y0), func[1](tspace, i, x0, y0))
+    #plt.plot(func[0](tspace[-1], i, x0, y0), func[1](tspace[-1], i, x0, y0), 'r>')
+    fig.savefig('Images/plot15sigma%1.1f.png'%i)
+plt.show()
