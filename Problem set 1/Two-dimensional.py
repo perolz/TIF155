@@ -56,9 +56,10 @@ sigma0Eq=[z.subs([(sigma,0),(x(0),1),(y(0),1)]) for z in newSolutions]
 angle=sy.sympify(sigma0Eq[1].rhs/sigma0Eq[0].rhs)
 test=sy.Eq(angle)
 sigma0Solutions=sy.simplify(sy.solve(test))
+tmp=[sy.N(z) for z in sigma0Solutions]
+print(tmp)
 
-print(sigma0Solutions)
-
+fig=plt.figure()
 
 
 # sigma0Solutions=sy.dsolve(sigma0Eq)

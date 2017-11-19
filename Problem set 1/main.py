@@ -29,24 +29,38 @@ def first_exercise(sigma_value):
     eq1=sy.Eq(sy.Derivative(x(t),t),(sigma+3)*x(t)+4*y(t))
     eq2=sy.Eq(sy.Derivative(y(t),t),-(9/4)*x(t)+(sigma-3)*y(t))
 
+    equation=[(sigma_value + 3) * x(t) + 4 * y(t),-(9/4)*x(t)+(sigma_value-3)*y(t)]
+    solution=sy.solve(equation)
 
+    print(solution)
+    w = 3
+    Y, X = np.mgrid[-w:w:100j, -w:w:100j]
+    U=(sigma_value+3)*X+4*Y
+    V=-9/4*X+(sigma_value-3)*Y
+
+
+
+    fig = plt.figure()
+    ax0 = fig.add_subplot(1,1,1)
+    ax0.streamplot(X, Y, U, V, density=[1, 2])
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title(r'Degenerate two dimensional system $\sigma=$%d' %sigma_value)
+    # circle=plt.Circle((solution[0][x(t)],solution[0][y(t)]),0.05,color='red',fill=False)
+    # ax0.add_artist(circle)
+    plt.savefig('Images/1.1sigma%d.png' %sigma_value)
+    plt.show()
     general_solution=sy.dsolve([eq1,eq2],[x(t),y(t)])
     #Specific Value
-    #value = [general_solution[0].subs([(C2,0.1),(C1,0.1)]),general_solution[1].subs([(C2,0.1),(C1,0.1)])]
-
-
-
-    #print(value)
 
     xlam = sy.lambdify((t,sigma,C1,C2), general_solution[0].rhs, modules='numpy')
     ylam = sy.lambdify((t,sigma,C1,C2), general_solution[1].rhs, modules='numpy')
 
     tspace=np.linspace(-1.5,1.5,1000)
 
-    x_vals = xlam(tspace,sigma_value,1,1)
-    y_vals = ylam(tspace,sigma_value,1,1)
-    plt.plot(x_vals,y_vals)
-    #plt.show()
+    x_vals = xlam(tspace,sigma_value,0.1,0.1)
+    y_vals = ylam(tspace,sigma_value,0.1,0.1)
+
 
 def second_exercise():
     sigma,c,d = sy.symbols('sigma,c,d')
@@ -196,9 +210,9 @@ def Subcriticalb():
 
 
 if __name__=='__main__':
-    #first_exercise(1)
+    first_exercise(0)
     #print('\n')
     #second_exercise()
     # normal_form()
     #saddle_node()
-    Subcriticalb()
+    #Subcriticalb()
