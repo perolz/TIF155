@@ -41,28 +41,40 @@ tprim = sy.symbols('tprim')
 eq5 = sy.Eq(0, y)
 eq6 = sy.Eq(0, -sy.sin(x) - sigma * y)
 system2 = [eq5, eq6]
+print(sy.solve(system2))
+#sy.pprint(system2)
 
-sy.pprint(system2)
-
+sigma_value=0
 w = 4
-Y, X = np.mgrid[-w:w:100j, -w:w:100j]
-U=Y
-V=-np.sin(X)-Y
-Z=np.array([[np.linalg.norm([U[i][j],V[i][j]]) for i in range(100)]for j in range(100)])
-speed = np.sqrt(U**2 + V**2)
-UN=U/speed
-VN=U/speed
+#Y, X = np.mgrid[-w:w:100j, -w:w:100j]
+#U=Y
+#V=-np.sin(X)-sigma_value*Y
+#Z=np.array([[np.linalg.norm([U[i][j],V[i][j]]) for i in range(100)]for j in range(100)])
+#speed = np.sqrt(U**2 + V**2)
+#UN=U/speed
+#VN=U/speed
 
 
 v=np.linspace(0, 2.0, 15, endpoint=True)
 fig = plt.figure()
 
 ax0 = fig.add_subplot(1,1,1)
-ax0.set_ylim(-2,2)
-cp = plt.contourf(Y, X, Z)
+X=[-np.pi,0,np.pi]
+Y=[0,0,0]
 
-cb = plt.colorbar(cp,ticks=v)
-plt.quiver(X, Y, UN, VN,color='Red')
+plt.scatter(X,Y,s=80,facecolors='none',edgecolors='r')
+
+#ax0.set_ylim(-2,2)
+#levels = [0,0.001,0.01,0.1, 0.5, 1]
+#cp = plt.contourf(Y, X, Z,levels)
+
+plt.title(r'Phase plot for every $\sigma$')
+plt.xlabel('x',fontweight='bold')
+plt.ylabel('x\'',fontweight='bold')
+
+#cb = plt.colorbar(cp,ticks=v)
+#plt.quiver(X, Y, UN, VN,color='Red')
+fig.savefig('Images/Plot_for_damped_pendelum.png')
 plt.show()
 
 
