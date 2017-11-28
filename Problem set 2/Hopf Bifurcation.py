@@ -43,7 +43,7 @@ eq1=sy.Eq(sy.Derivative(x(t),t),mu*x-3*y-x**3)
 eq2=sy.Eq(sy.Derivative(y(t),t),3*x+mu*y+2*y**3)
 system=[eq1,eq2]
 
-muValue=0
+muValue=4
 dxdt=sy.lambdify((mu,x,y),eq1.rhs)
 dydt=sy.lambdify((mu,x,y),eq2.rhs)
 
@@ -52,23 +52,25 @@ newSystem=[z.subs('**','^') for z in newSystem]
 print(newSystem)
 ts = np.linspace(-1, 1, 100)
 Y, X = np.mgrid[-3:3:100j, -3:3:100j]
-U = -X**3 +muValue * X-3 *Y
-V = 3*X + 2*Y**3 + muValue*Y
+U=muValue*Y-X**2
+V=-X+muValue*Y+2*X**2
+
+# U = -X**3 +muValue * X-3 *Y
+# V = 3*X + 2*Y**3 + muValue*Y
 speed = np.sqrt(U*U + V*V)
 fig = plt.figure(figsize=(7, 9))
 
 
 #  Varying density along a streamline
 ax0 = fig.add_subplot(1,1,1)
-strm = ax0.streamplot(X, Y, U, V, color=U, linewidth=2, cmap='jet')
-fig.colorbar(strm.lines)
-ax0.set_title(r'$\dot{x}=4*x-3y-x^3 \quad \dot{y}=3*x + 4y+2*y^3$')
+strm = ax0.streamplot(X, Y, U, V, linewidth=2)
+ax0.set_title(r'$\dot{x}=4*x+y-x^2 \quad \dot{y}=-x +4*y+2*x^2$')
 plt.xlabel('x',fontweight='bold')
 plt.ylabel('y',fontweight='bold')
-plt.suptitle(r'Index for plot $I_C$=%d' %muValue)
+plt.suptitle(r'Hopf bifucation with $\mu$=%d' %muValue)
 
 
-#plt.savefig('Images/Indexing%d.png' %index)
+plt.savefig('Images/Hopfeq2%d.png' %muValue)
 
 
 plt.show()
